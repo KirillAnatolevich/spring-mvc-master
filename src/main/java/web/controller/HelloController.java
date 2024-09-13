@@ -6,12 +6,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import web.model.Car;
 import web.repository.CarRepository;
 import web.service.CarService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HelloController {
@@ -27,19 +29,15 @@ public class HelloController {
 		model.addAttribute("messages", messages);
 		return "index";
 	}
+
 	@GetMapping("/cars")
-	public String printCars(ModelMap model){
-		List<Car> cars = carService.createListCar(carService.getCarRepository().getQuantity());
-		model.addAttribute("cars", cars);
-		return "car";
-	}
-	@GetMapping("/cars/{count}")
-	public String printCar(@PathVariable int count, ModelMap model){
-		if (count < 5){
-			List<Car> cars = carService.createListCar(count);
-			model.addAttribute("cars", cars);
+	public String printCar(@RequestParam(value = "count", required = false, defaultValue = "1") @PathVariable(value = "count") Integer count, ModelMap model){
+		List<Car> cars = carService.getCarRepository().getCars();
+		if (count < 5 && count > 0){
+			List<Car> mycars = cars.stream().limit(count).collect(Collectors.toList());
+			model.addAttribute("cars", mycars);
 		}
-		else printCars(model);
+		else model.addAttribute("cars", cars);
 		return "car";
 	}
 }

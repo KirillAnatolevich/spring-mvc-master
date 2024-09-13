@@ -10,18 +10,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import web.model.Car;
+import web.service.CarService;
+
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan("web")
 public class WebConfig implements WebMvcConfigurer {
-
     private final ApplicationContext applicationContext;
+    private final CarService carService;
 
-    public WebConfig(ApplicationContext applicationContext) {
+    public WebConfig(ApplicationContext applicationContext, CarService carService) {
         this.applicationContext = applicationContext;
+        this.carService = carService;
     }
 
+    @Bean
+    public List<Car> cars(){
+        return carService.createListCars();
+    }
 
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
@@ -39,7 +48,6 @@ public class WebConfig implements WebMvcConfigurer {
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
     }
-
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {

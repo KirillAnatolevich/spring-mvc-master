@@ -1,6 +1,7 @@
 package web.repository;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import java.util.Random;
 
 @Component
 @Data
+@NoArgsConstructor
 public class CarRepository {
     private List<Car> cars = new ArrayList<>();
     private final String[] model = {"Gaz","Ford","micubisi","Lombsrgini","Ural"};
@@ -19,16 +21,12 @@ public class CarRepository {
     private final int[] sped = {100,50,150,200,250};
     private final int quantity = 5;
 
-    public CarRepository() {}
-
     public List<Car> createListCar(int quantity){
-        for (int i = 0; i < quantity; i++){
-            cars.add(new Car(model[new Random().nextInt(quantity)], color[new Random().nextInt(quantity)], sped[new Random().nextInt(quantity)]));
-        }
-        return cars;
-    }
 
-    public List<Car> getCars() {
+        for (int i = 0; i < quantity; i++) {
+            cars.add(new Car(model[new Random().nextInt(quantity)], color[new Random().nextInt(quantity)], sped[new Random().nextInt(quantity)]));
+
+        }
         return cars;
     }
 }
